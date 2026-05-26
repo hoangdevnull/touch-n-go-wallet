@@ -1,0 +1,6 @@
+{
+  "name": "TNG eWallet",
+  "description": "Touch 'n Go eWallet clone with integrated e-wallet payments and public transport ticketing features.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

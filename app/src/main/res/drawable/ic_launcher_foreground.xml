@@ -1,0 +1,33 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Contactless wave lines -->
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M68,36 C72,42 72,50 68,56 M74,30 C80,38 80,48 74,56 M80,24 C88,34 88,48 80,58"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:strokeColor="#FFCB05" />
+
+    <!-- Stylized card base -->
+    <path
+        android:fillColor="#E6FFFFFF"
+        android:pathData="M24,32 H64 A6,6 0 0 1 70,38 V66 A6,6 0 0 1 64,72 H24 A6,6 0 0 1 18,66 V38 A6,6 0 0 1 24,32 Z" />
+
+    <!-- Gold smart chip on the card -->
+    <path
+        android:fillColor="#FFCB05"
+        android:pathData="M26,44 H34 A2,2 0 0 1 36,46 V52 A2,2 0 0 1 34,54 H26 A2,2 0 0 1 24,52 V46 A2,2 0 0 1 26,44 Z" />
+
+    <!-- Stylized magnetic stripe or design accent -->
+    <path
+        android:fillColor="#004182"
+        android:pathData="M18,58 H70 V62 H18 Z" />
+
+    <!-- Small letter T & G representing Touch 'n Go -->
+    <path
+        android:fillColor="#0054A6"
+        android:pathData="M44,44 H48 V46 H44 V52 H42 V46 H38 V44 H44 Z M52,48 H56 V50 H52 V52 H50 V44 H56 V46 H52 M52,48 M52,48 Z" />
+</vector>
