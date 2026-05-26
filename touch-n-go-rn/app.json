@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "Touch n Go Wallet",
+    "slug": "touch-n-go-wallet",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "tngwallet",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "extra": {
+      "EXPO_PUBLIC_INVESTMENT_EXECUTION_MODE": "demo",
+      "EXPO_PUBLIC_AST_RPC_URL": "",
+      "EXPO_PUBLIC_AST_DEMO_PRIVATE_KEY": "",
+      "EXPO_PUBLIC_AST_USER_ACCOUNT_ID": "0.0.8001",
+      "EXPO_PUBLIC_AST_TREASURY_ACCOUNT_ID": "0.0.9001"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.example.tngwallet"
+    },
+    "android": {
+      "package": "com.example.tngwallet",
+      "adaptiveIcon": {
+        "backgroundColor": "#0057B8"
+      }
+    },
+    "plugins": ["expo-router"]
+  }
+}
