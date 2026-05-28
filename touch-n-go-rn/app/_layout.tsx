@@ -5,11 +5,24 @@ import { Pressable, StyleSheet, Text } from "react-native";
 import { colors } from "../constants/theme";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { InvestmentProvider, useInvestments } from "../src/state/InvestmentProvider";
+import { useEffect } from "react";
 
 function Toast() {
   const { toast, clearToast } = useWallet();
   const { toast: investmentToast, clearToast: clearInvestmentToast } = useInvestments();
   const message = investmentToast ?? toast;
+
+  useEffect(() => {
+    if (!message) return;
+
+    const timeout = setTimeout(() => {
+      clearToast();
+      clearInvestmentToast();
+    }, 2800);
+
+    return () => clearTimeout(timeout);
+  }, [clearInvestmentToast, clearToast, message]);
+
   if (!message) return null;
   return (
     <Pressable

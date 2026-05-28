@@ -1,5 +1,6 @@
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import { useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { colors } from "../../constants/theme";
 import { money } from "../../src/domain/format";
@@ -26,6 +27,7 @@ const favourites = [
 
 export default function DashboardScreen() {
   const { state, store } = useWallet();
+  const [isBalanceHidden, setIsBalanceHidden] = useState(false);
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
@@ -59,8 +61,14 @@ export default function DashboardScreen() {
           <View style={styles.checkCircle}>
             <Ionicons name="checkmark" size={15} color="#D8EBFF" />
           </View>
-          <Text style={styles.balance}>{money(state.wallet.balance)}</Text>
-          <Ionicons name="eye-outline" size={24} color="#BFE1FF" />
+          <Text style={styles.balance}>{isBalanceHidden ? "RM ••••" : money(state.wallet.balance)}</Text>
+          <Pressable
+            hitSlop={10}
+            onPress={() => setIsBalanceHidden((hidden) => !hidden)}
+            style={styles.eyeButton}
+          >
+            <Ionicons name={isBalanceHidden ? "eye-off-outline" : "eye-outline"} size={24} color="#BFE1FF" />
+          </Pressable>
         </View>
         <Pressable style={styles.assetLink} onPress={() => store.showEventMessage("Asset details opened")}>
           <Text style={styles.assetText}>View asset details</Text>
@@ -386,6 +394,12 @@ const styles = StyleSheet.create({
     color: colors.surface,
     fontSize: 32,
     fontWeight: "500",
+  },
+  eyeButton: {
+    alignItems: "center",
+    height: 32,
+    justifyContent: "center",
+    width: 32,
   },
   assetLink: {
     alignItems: "center",

@@ -1,14 +1,11 @@
-import {
-  demoInvestmentAccounts,
-  tokenizedAssets,
-} from "../domain/investments";
+import { tokenizedAssets } from "../domain/investments";
 import type {
   AssetHolding,
+  InvestmentOrderRequest,
   InvestmentOperationResult,
-  InvestmentTransferRequest,
 } from "../domain/investments";
-import { createDemoOnchainTransferExecutor } from "../services/investmentTransfer";
-import type { InvestmentTransferExecutor } from "../services/investmentTransfer";
+import { createDemoInvestmentOrderExecutor } from "../services/investmentTransfer";
+import type { InvestmentOrderExecutor } from "../services/investmentTransfer";
 
 export type InvestmentState = {
   holdings: AssetHolding[];
@@ -20,8 +17,16 @@ export const initialInvestmentState: InvestmentState = {
   lastMessage: null,
 };
 
+type PersistedAssetHolding = AssetHolding & { lastTransactionId?: string };
+
 const cloneState = (state: InvestmentState): InvestmentState => ({
-  holdings: state.holdings.map((holding) => ({ ...holding })),
+  holdings: state.holdings.map((holding) => {
+    const persistedHolding = holding as PersistedAssetHolding;
+    return {
+      ...holding,
+      lastReferenceId: persistedHolding.lastReferenceId ?? persistedHolding.lastTransactionId ?? "",
+    };
+  }),
   lastMessage: state.lastMessage,
 });
 
@@ -30,7 +35,7 @@ export class InvestmentStore {
   private listeners = new Set<(state: InvestmentState, message?: string) => void>();
 
   constructor(
-    private readonly executor: InvestmentTransferExecutor = createDemoOnchainTransferExecutor(),
+    private readonly executor: InvestmentOrderExecutor = createDemoInvestmentOrderExecutor(),
     seed: InvestmentState = initialInvestmentState,
   ) {
     this.state = cloneState(seed);
@@ -58,27 +63,27 @@ export class InvestmentStore {
     if (!asset) return this.fail("Tokenized asset not found");
     if (units <= 0) return this.fail("Enter a valid unit amount");
 
-    const transfer = await this.executor.executeTransfer(
-      this.buildTransferRequest("buy", asset.securityId, assetId, units),
+    const order = await this.executor.executeOrder(
+      this.buildOrderRequest("buy", asset.referenceId, assetId, units),
     );
-    if (!transfer.ok) return this.fail("On-chain buy transfer failed");
+    if (!order.ok) return this.fail("Investment order could not be confirmed");
 
     const existing = this.state.holdings.find((holding) => holding.assetId === assetId);
     if (existing) {
       existing.averagePrice =
         (existing.averagePrice * existing.units + asset.unitPrice * units) / (existing.units + units);
       existing.units += units;
-      existing.lastTransactionId = transfer.transactionId;
+      existing.lastReferenceId = order.referenceId;
     } else {
       this.state.holdings.unshift({
         assetId,
         units,
         averagePrice: asset.unitPrice,
-        lastTransactionId: transfer.transactionId,
+        lastReferenceId: order.referenceId,
       });
     }
 
-    return this.ok(`Bought ${units} ${asset.symbol} units on-chain`, transfer.transactionId);
+    return this.ok(`Investment confirmed: ${units} ${asset.symbol} units bought`, order.referenceId);
   }
 
   async sell(assetId: string, units: number): Promise<InvestmentOperationResult> {
@@ -91,39 +96,36 @@ export class InvestmentStore {
       return this.fail("Not enough tokenized asset units to sell");
     }
 
-    const transfer = await this.executor.executeTransfer(
-      this.buildTransferRequest("sell", asset.securityId, assetId, units),
+    const order = await this.executor.executeOrder(
+      this.buildOrderRequest("sell", asset.referenceId, assetId, units),
     );
-    if (!transfer.ok) return this.fail("On-chain sell transfer failed");
+    if (!order.ok) return this.fail("Sell order could not be confirmed");
 
     existing.units -= units;
-    existing.lastTransactionId = transfer.transactionId;
+    existing.lastReferenceId = order.referenceId;
     this.state.holdings = this.state.holdings.filter((holding) => holding.units > 0);
 
-    return this.ok(`Sold ${units} ${asset.symbol} units on-chain`, transfer.transactionId);
+    return this.ok(`Sell order confirmed: ${units} ${asset.symbol} units sold`, order.referenceId);
   }
 
-  private buildTransferRequest(
+  private buildOrderRequest(
     direction: "buy" | "sell",
-    securityId: string,
+    referenceId: string,
     assetId: string,
     units: number,
-  ): InvestmentTransferRequest {
-    const buy = direction === "buy";
+  ): InvestmentOrderRequest {
     return {
       direction,
-      securityId,
+      referenceId,
       assetId,
-      sourceAccountId: buy ? demoInvestmentAccounts.treasuryAccountId : demoInvestmentAccounts.userAccountId,
-      targetAccountId: buy ? demoInvestmentAccounts.userAccountId : demoInvestmentAccounts.treasuryAccountId,
       amount: String(units),
     };
   }
 
-  private ok(message: string, transactionId?: string): InvestmentOperationResult {
+  private ok(message: string, referenceId?: string): InvestmentOperationResult {
     this.state.lastMessage = message;
     this.emit(message);
-    return { ok: true, message, transactionId };
+    return { ok: true, message, referenceId };
   }
 
   private fail(message: string): InvestmentOperationResult {
@@ -138,5 +140,5 @@ export class InvestmentStore {
   }
 }
 
-export const createInvestmentStore = (executor?: InvestmentTransferExecutor, seed?: InvestmentState) =>
+export const createInvestmentStore = (executor?: InvestmentOrderExecutor, seed?: InvestmentState) =>
   new InvestmentStore(executor, seed);

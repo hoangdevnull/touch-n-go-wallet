@@ -11,7 +11,25 @@ type InvestmentContextValue = {
 };
 
 const STORAGE_KEY = "touch-n-go-investment-state";
+const STORAGE_VERSION = 2;
 const InvestmentContext = createContext<InvestmentContextValue | null>(null);
+
+type PersistedInvestmentState = {
+  version: number;
+  state: InvestmentState;
+};
+
+const serializeState = (state: InvestmentState) =>
+  JSON.stringify({
+    version: STORAGE_VERSION,
+    state,
+  } satisfies PersistedInvestmentState);
+
+const parsePersistedState = (raw: string): InvestmentState | null => {
+  const parsed = JSON.parse(raw) as Partial<PersistedInvestmentState>;
+  if (parsed.version === STORAGE_VERSION && parsed.state) return parsed.state;
+  return null;
+};
 
 export function InvestmentProvider({ children }: { children: React.ReactNode }) {
   const storeRef = useRef(createInvestmentStore());
@@ -22,7 +40,17 @@ export function InvestmentProvider({ children }: { children: React.ReactNode }) 
   useEffect(() => {
     AsyncStorage.getItem(STORAGE_KEY)
       .then((raw) => {
-        if (raw) storeRef.current.hydrate(JSON.parse(raw) as InvestmentState);
+        if (!raw) return;
+
+        const persistedState = parsePersistedState(raw);
+        if (persistedState) {
+          storeRef.current.hydrate(persistedState);
+          return;
+        }
+
+        AsyncStorage.setItem(STORAGE_KEY, serializeState(initialInvestmentState)).catch(() => {
+          setToast("Unable to reset investment demo state on this device.");
+        });
       })
       .finally(() => {
         hydrated.current = true;
@@ -34,7 +62,7 @@ export function InvestmentProvider({ children }: { children: React.ReactNode }) 
       setState(nextState);
       if (message) setToast(message);
       if (hydrated.current) {
-        AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(nextState)).catch(() => {
+        AsyncStorage.setItem(STORAGE_KEY, serializeState(nextState)).catch(() => {
           setToast("Unable to persist investment changes on this device.");
         });
       }

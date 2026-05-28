@@ -2,10 +2,13 @@ export type TokenizedAsset = {
   id: string;
   name: string;
   issuer: string;
-  securityId: string;
+  referenceId: string;
   symbol: string;
   unitPrice: number;
+  minimumInvestment: number;
   projectedYield: string;
+  assetType: string;
+  jurisdiction: string;
   risk: "Low" | "Medium";
 };
 
@@ -13,55 +16,54 @@ export type AssetHolding = {
   assetId: string;
   units: number;
   averagePrice: number;
-  lastTransactionId: string;
+  lastReferenceId: string;
 };
 
-export type InvestmentTransferDirection = "buy" | "sell";
+export type InvestmentOrderDirection = "buy" | "sell";
 
-export type InvestmentTransferRequest = {
-  direction: InvestmentTransferDirection;
-  securityId: string;
-  sourceAccountId: string;
-  targetAccountId: string;
+export type InvestmentOrderRequest = {
+  direction: InvestmentOrderDirection;
+  referenceId: string;
   amount: string;
   assetId: string;
 };
 
-export type InvestmentTransferResult = {
+export type InvestmentOrderResult = {
   ok: boolean;
-  transactionId: string;
+  referenceId: string;
 };
 
 export type InvestmentOperationResult = {
   ok: boolean;
   message: string;
-  transactionId?: string;
-};
-
-export const demoInvestmentAccounts = {
-  userAccountId: "0.0.8001",
-  treasuryAccountId: "0.0.9001",
+  referenceId?: string;
 };
 
 export const tokenizedAssets: TokenizedAsset[] = [
   {
-    id: "bpmb-green-bond",
-    name: "BPMB Green Bond 2028",
-    issuer: "AST Bank",
-    securityId: "0.0.61001",
-    symbol: "BGB28",
+    id: "petronas-station-sukuk",
+    name: "Sukuk RWA - Petronas Petrol Station",
+    issuer: "Bank Pembangunan Malaysia",
+    referenceId: "BPMB-SUKUK-RWA-001",
+    symbol: "PET-SK01",
     unitPrice: 10,
-    projectedYield: "4.8% p.a.",
+    minimumInvestment: 10,
+    projectedYield: "5.1% p.a.",
+    assetType: "Islamic bond",
+    jurisdiction: "Malaysia",
     risk: "Low",
   },
   {
-    id: "kl-infra-income",
-    name: "KL Infra Income Note",
-    issuer: "AST Bank",
-    securityId: "0.0.61002",
-    symbol: "KLIN",
+    id: "bpmb-green-infra-note",
+    name: "BPMB Green Infrastructure Note",
+    issuer: "Bank Pembangunan Malaysia",
+    referenceId: "BPMB-RWA-002",
+    symbol: "BGI-02",
     unitPrice: 25,
+    minimumInvestment: 25,
     projectedYield: "5.2% p.a.",
+    assetType: "Tokenized note",
+    jurisdiction: "Malaysia",
     risk: "Medium",
   },
 ];

@@ -10,7 +10,7 @@ import type {
 
 export const initialState: AppState = {
   wallet: {
-    balance: 150,
+    balance: 760,
     goplusBalance: 25.5,
     rewardPoints: 450,
   },
@@ -228,6 +228,41 @@ export class WalletStore {
     );
     const operation = isWithdrawal ? "withdrawn from GO+" : "invested into GO+";
     return this.ok(`RM ${amount.toFixed(2)} successfully ${operation}!`);
+  }
+
+  buyTokenizedAsset(assetName: string, symbol: string, amount: number): OperationResult {
+    if (!assetName.trim() || !symbol.trim() || amount <= 0) {
+      return this.fail("Investment failed. Enter a valid amount.");
+    }
+    if (this.state.wallet.balance < amount) {
+      return this.fail("Investment failed. Insufficient wallet balance.");
+    }
+
+    this.state.wallet.balance = roundMoney(this.state.wallet.balance - amount);
+    this.addTransaction(
+      "TRANSFER",
+      `Buy ${symbol}`,
+      assetName,
+      amount,
+      true,
+    );
+    return this.ok(`Paid RM ${amount.toFixed(2)} for ${symbol}.`);
+  }
+
+  sellTokenizedAsset(assetName: string, symbol: string, amount: number): OperationResult {
+    if (!assetName.trim() || !symbol.trim() || amount <= 0) {
+      return this.fail("Sell failed. Enter a valid amount.");
+    }
+
+    this.state.wallet.balance = roundMoney(this.state.wallet.balance + amount);
+    this.addTransaction(
+      "TRANSFER",
+      `Sell ${symbol}`,
+      assetName,
+      amount,
+      false,
+    );
+    return this.ok(`Received RM ${amount.toFixed(2)} from ${symbol}.`);
   }
 
   addRewardsPoints(points: number): OperationResult {

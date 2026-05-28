@@ -7,14 +7,27 @@
     "scheme": "tngwallet",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "icon": "./assets/images/icon.png",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0057B8"
+    },
+    "web": {
+      "favicon": "./assets/images/favicon.png"
+    },
     "extra": {
       "EXPO_PUBLIC_INVESTMENT_EXECUTION_MODE": "demo",
-      "EXPO_PUBLIC_AST_RPC_URL": "",
-      "EXPO_PUBLIC_AST_DEMO_PRIVATE_KEY": "",
-      "EXPO_PUBLIC_AST_USER_ACCOUNT_ID": "0.0.8001",
-      "EXPO_PUBLIC_AST_TREASURY_ACCOUNT_ID": "0.0.9001"
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "e40bf0e7-b7c0-4d71-912e-a658bb026dee"
+      }
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.example.tngwallet"
@@ -22,9 +35,22 @@
     "android": {
       "package": "com.example.tngwallet",
       "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#0057B8"
       }
     },
-    "plugins": ["expo-router"]
+    "plugins": [
+      "expo-router",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.ttf",
+            "node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"
+          ]
+        }
+      ]
+    ],
+    "owner": "kevinpham"
   }
 }

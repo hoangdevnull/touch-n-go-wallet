@@ -11,7 +11,25 @@ type WalletContextValue = {
 };
 
 const STORAGE_KEY = "touch-n-go-wallet-state";
+const STORAGE_VERSION = 2;
 const WalletContext = createContext<WalletContextValue | null>(null);
+
+type PersistedWalletState = {
+  version: number;
+  state: AppState;
+};
+
+const serializeState = (state: AppState) =>
+  JSON.stringify({
+    version: STORAGE_VERSION,
+    state,
+  } satisfies PersistedWalletState);
+
+const parsePersistedState = (raw: string): AppState | null => {
+  const parsed = JSON.parse(raw) as Partial<PersistedWalletState>;
+  if (parsed.version === STORAGE_VERSION && parsed.state) return parsed.state;
+  return null;
+};
 
 export function WalletProvider({ children }: { children: React.ReactNode }) {
   const storeRef = useRef(createWalletStore());
@@ -22,7 +40,17 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     AsyncStorage.getItem(STORAGE_KEY)
       .then((raw) => {
-        if (raw) storeRef.current.hydrate(JSON.parse(raw) as AppState);
+        if (!raw) return;
+
+        const persistedState = parsePersistedState(raw);
+        if (persistedState) {
+          storeRef.current.hydrate(persistedState);
+          return;
+        }
+
+        AsyncStorage.setItem(STORAGE_KEY, serializeState(initialState)).catch(() => {
+          setToast("Unable to reset wallet demo state on this device.");
+        });
       })
       .finally(() => {
         hydrated.current = true;
@@ -34,7 +62,7 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
       setState(nextState);
       if (message) setToast(message);
       if (hydrated.current) {
-        AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(nextState)).catch(() => {
+        AsyncStorage.setItem(STORAGE_KEY, serializeState(nextState)).catch(() => {
           setToast("Unable to persist wallet changes on this device.");
         });
       }

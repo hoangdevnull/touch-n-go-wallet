@@ -7,7 +7,7 @@ describe("wallet store", () => {
 
     store.reloadWallet(50);
 
-    expect(store.getState().wallet.balance).toBe(200);
+    expect(store.getState().wallet.balance).toBe(810);
     expect(store.getState().transactions[0]).toMatchObject({
       type: "RELOAD",
       title: "Wallet Reload",
@@ -23,7 +23,7 @@ describe("wallet store", () => {
 
     expect(result.ok).toBe(false);
     expect(result.message).toContain("Insufficient");
-    expect(store.getState().wallet.balance).toBe(150);
+    expect(store.getState().wallet.balance).toBe(760);
     expect(store.getState().transactions).toHaveLength(0);
   });
 
@@ -35,7 +35,7 @@ describe("wallet store", () => {
 
     expect(purchase.ok).toBe(true);
     expect(ticket.status).toBe("ACTIVE");
-    expect(store.getState().wallet.balance).toBeCloseTo(147.2);
+    expect(store.getState().wallet.balance).toBeCloseTo(757.2);
 
     store.markTicketUsed(ticket.id);
 
@@ -46,10 +46,31 @@ describe("wallet store", () => {
     const store = createWalletStore();
 
     expect(store.triggerGoPlusInvestment(30, false).ok).toBe(true);
-    expect(store.getState().wallet.balance).toBe(120);
+    expect(store.getState().wallet.balance).toBe(730);
     expect(store.getState().wallet.goplusBalance).toBe(55.5);
 
     expect(store.triggerGoPlusInvestment(999, true).ok).toBe(false);
     expect(store.getState().wallet.goplusBalance).toBe(55.5);
+  });
+
+  it("syncs tokenized asset buy and sell with the global wallet balance", () => {
+    const store = createWalletStore();
+
+    const buy = store.buyTokenizedAsset("Sukuk RWA - Petronas Petrol Station", "PET-SK01", 50);
+    const sell = store.sellTokenizedAsset("Sukuk RWA - Petronas Petrol Station", "PET-SK01", 20);
+
+    expect(buy.ok).toBe(true);
+    expect(sell.ok).toBe(true);
+    expect(store.getState().wallet.balance).toBe(730);
+    expect(store.getState().transactions[0]).toMatchObject({
+      title: "Sell PET-SK01",
+      amount: 20,
+      isExpense: false,
+    });
+    expect(store.getState().transactions[1]).toMatchObject({
+      title: "Buy PET-SK01",
+      amount: 50,
+      isExpense: true,
+    });
   });
 });
