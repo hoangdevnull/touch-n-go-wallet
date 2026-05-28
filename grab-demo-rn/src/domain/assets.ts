@@ -1,0 +1,96 @@
+import type { Restaurant, RideService, TokenAsset } from "./types";
+
+export const rideServices: RideService[] = [
+  { id: "justgrab", typeName: "JustGrab", seatCount: 4, icon: "car-outline", baseFare: 8.0, durationMin: 12, description: "Nearest car or taxi" },
+  { id: "grabcar", typeName: "GrabCar", seatCount: 4, icon: "car-sport-outline", baseFare: 12.0, durationMin: 11, description: "Premium 4-seater ride" },
+  { id: "grabbike", typeName: "GrabBike", seatCount: 1, icon: "bicycle-outline", baseFare: 4.5, durationMin: 9, description: "Beat the traffic quickly" },
+  { id: "grabshare", typeName: "GrabShare", seatCount: 4, icon: "people-outline", baseFare: 6.5, durationMin: 16, description: "Share the ride, split fare" },
+];
+
+export const restaurants: Restaurant[] = [
+  {
+    id: "rest_1",
+    name: "McBurger Supreme Diner",
+    rating: 4.8,
+    category: "Burgers • American • Fast Food",
+    deliveryTime: "15-25 min",
+    distance: "1.8 km",
+    deliveryFee: 1.99,
+    promoLabel: "Buy 1 Get 1 Free",
+    bannerColorStart: "#FF5959",
+    bannerColorEnd: "#FF9359",
+    menu: [
+      { name: "Signature Beef Burger Meal", description: "Thick beef patty with cheddar, caramelized onions, fries and soft drink", price: 12.5, category: "Mains", emoji: "🍔" },
+      { name: "Double Cheese Burger", description: "Two flame-grilled beef patties with processed cheese, dill pickle, mustard & ketchup", price: 8.9, category: "Mains", emoji: "🍔" },
+      { name: "Spicy McChicken Supreme", description: "Crispy shredded iceberg lettuce & special spicy sauce inside a toasted sesame seed bun", price: 7.5, category: "Mains", emoji: "🍗" },
+      { name: "Golden Cheesy Fries", description: "Thick-cut potato fries drowned in liquid cheddar cheese and smoky bacon bits", price: 5.2, category: "Sides", emoji: "🍟" },
+      { name: "Cold Matcha Latte", description: "Organic shade-grown matcha whisked with rich natural creamy milk", price: 4.5, category: "Drinks", emoji: "🍵" },
+    ],
+  },
+  {
+    id: "rest_2",
+    name: "Sushi Zen & Donburi",
+    rating: 4.9,
+    category: "Japanese • Sushi • Seafood",
+    deliveryTime: "20-35 min",
+    distance: "2.4 km",
+    deliveryFee: 2.49,
+    promoLabel: "Up to 30% OFF",
+    bannerColorStart: "#4A4E69",
+    bannerColorEnd: "#9A8C98",
+    menu: [
+      { name: "Premium Aburi Sushi Set", description: "8-piece lightly flame-seared premium salmon, tuna, unagi & scallop nigiri", price: 18.9, category: "Signature", emoji: "🍣" },
+      { name: "Salmon Mentai Don", description: "Thick fresh slices of salmon over pearl rice drizzled with rich spicy cod roe mayo", price: 14.5, category: "Mains", emoji: "🍚" },
+      { name: "Crispy Tempura Moriawase", description: "Assorted tiger prawns, pumpkin slices, sweet potato & eggplant deep fried in airy batter", price: 9.8, category: "Sides", emoji: "🍤" },
+      { name: "Spicy Salmon Roll (Maki)", description: "8-piece rolls containing sea-salted spicy salmon and crunchy cucumber toppings", price: 11.2, category: "Signature", emoji: "🍣" },
+      { name: "Iced Roasted Oolong Tea", description: "Unsweetened fragrant tea brewed from natural high-altitude oolong leaves", price: 3.0, category: "Drinks", emoji: "🥤" },
+    ],
+  },
+  {
+    id: "rest_3",
+    name: "Bubble Co. Premium Milk Tea",
+    rating: 4.7,
+    category: "Beverages • Bubble Tea • Desserts",
+    deliveryTime: "10-20 min",
+    distance: "0.9 km",
+    deliveryFee: 0.99,
+    promoLabel: "Free Delivery $15+",
+    bannerColorStart: "#FFC3A0",
+    bannerColorEnd: "#FFAFBD",
+    menu: [
+      { name: "Golden Brown Sugar Boba", description: "House-brewed black tea with cream, caramelized brown sugar pearls", price: 6.5, category: "Boba", emoji: "🧋" },
+      { name: "Taro Coco Jelly Smoothie", description: "Rich fresh purple taro blended with organic coconut water and smooth jelly cubes", price: 7.2, category: "Smoothie", emoji: "🧋" },
+      { name: "Jasmine Green Tea Float", description: "Light floral organic green tea topped with creamy vanilla gelato ice cream", price: 5.8, category: "Tea", emoji: "🍵" },
+      { name: "Signature Egg Pudding Cup", description: "Warm melt-in-the-mouth sweet egg pudding doused in amber caramel syrup", price: 4.0, category: "Desserts", emoji: "🍮" },
+    ],
+  },
+];
+
+export const tokenAssets: TokenAsset[] = [
+  {
+    id: "petronas-station-sukuk",
+    name: "Sukuk RWA - Petronas Petrol Station",
+    symbol: "PET-SK01",
+    issuer: "Bank Pembangunan Malaysia",
+    referenceId: "BPMB-SUKUK-RWA-001",
+    unitPrice: 10,
+    minimumInvestment: 10,
+    projectedYield: "5.1% p.a.",
+    assetType: "Islamic bond",
+    jurisdiction: "Malaysia",
+    risk: "Low",
+  },
+  {
+    id: "bpmb-green-infra-note",
+    name: "BPMB Green Infrastructure Note",
+    symbol: "BGI-02",
+    issuer: "Bank Pembangunan Malaysia",
+    referenceId: "BPMB-RWA-002",
+    unitPrice: 25,
+    minimumInvestment: 25,
+    projectedYield: "5.2% p.a.",
+    assetType: "Tokenized note",
+    jurisdiction: "Malaysia",
+    risk: "Medium",
+  },
+];

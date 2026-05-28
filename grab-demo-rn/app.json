@@ -1,0 +1,50 @@
+{
+  "expo": {
+    "name": "Grab Demo",
+    "slug": "grab-demo-rn",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "grabdemo",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#00B14F"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.example.grabdemorndemo"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#00B14F"
+      },
+      "package": "com.example.grabdemorndemo",
+      "jsEngine": "hermes"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "./plugins/withExtractNativeLibs",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "extraGradleProps": {
+              "expo.useLegacyPackaging": "false"
+            }
+          }
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
