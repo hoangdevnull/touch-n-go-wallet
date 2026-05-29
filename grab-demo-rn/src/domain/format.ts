@@ -1,5 +1,5 @@
 export const money = (value: number) =>
-  `$${value.toFixed(2)}`;
+  `RM ${value.toFixed(2)}`;
 
 export const round = (value: number) =>
   Math.round(value * 100) / 100;

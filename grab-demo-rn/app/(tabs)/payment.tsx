@@ -110,7 +110,7 @@ export default function PaymentScreen() {
             <View style={styles.topUpRow}>
               {[10, 25, 50].map((amt) => (
                 <Pressable key={amt} style={styles.topUpBtn} onPress={() => store.addBalance(amt)}>
-                  <Text style={styles.topUpBtnText}>+${amt}</Text>
+                  <Text style={styles.topUpBtnText}>+RM {amt}</Text>
                 </Pressable>
               ))}
             </View>
@@ -470,9 +470,9 @@ function ScannerMockup({ onClose }: { onClose: () => void }) {
 }
 
 const MOCK_TXS = [
-  { title: "Wallet Top-Up", sub: "Bank Transfer *8892 • 26 May", amount: "$30.00", isCredit: true },
-  { title: "JustGrab Booking", sub: "Ride • 25 May, 04:32 PM", amount: "$14.50", isCredit: false },
-  { title: "McBurger Supreme", sub: "Food Delivery • 24 May", amount: "$22.80", isCredit: false },
+  { title: "Wallet Top-Up", sub: "Bank Transfer *8892 • 26 May", amount: "RM 30.00", isCredit: true },
+  { title: "JustGrab Booking", sub: "Ride • 25 May, 04:32 PM", amount: "RM 14.50", isCredit: false },
+  { title: "McBurger Supreme", sub: "Food Delivery • 24 May", amount: "RM 22.80", isCredit: false },
 ];
 
 const styles = StyleSheet.create({

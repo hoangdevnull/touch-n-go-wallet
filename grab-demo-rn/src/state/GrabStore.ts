@@ -63,7 +63,7 @@ export class GrabStore {
   // ── Balance ──────────────────────────────────────────────────────────────
   addBalance(amount: number) {
     this.state.balance = round(this.state.balance + amount);
-    this.emit(`Added $${amount.toFixed(2)} to GrabPay`);
+    this.emit(`Added RM ${amount.toFixed(2)} to GrabPay`);
   }
 
   // ── Ride booking ─────────────────────────────────────────────────────────
@@ -205,7 +205,7 @@ export class GrabStore {
     const cost = round(unitPrice * units);
     if (units <= 0) return { ok: false, message: "Enter a valid number of units." };
     if (this.state.balance < cost)
-      return { ok: false, message: `Insufficient balance. Need $${cost.toFixed(2)}.` };
+      return { ok: false, message: `Insufficient balance. Need RM ${cost.toFixed(2)}.` };
 
     this.state.balance = round(this.state.balance - cost);
 
@@ -223,8 +223,8 @@ export class GrabStore {
       ];
     }
 
-    this.emit(`Purchased ${units} unit${units > 1 ? "s" : ""} for $${cost.toFixed(2)}`);
-    return { ok: true, message: `Purchased ${units} unit${units > 1 ? "s" : ""} for $${cost.toFixed(2)}` };
+    this.emit(`Purchased ${units} unit${units > 1 ? "s" : ""} for RM ${cost.toFixed(2)}`);
+    return { ok: true, message: `Purchased ${units} unit${units > 1 ? "s" : ""} for RM ${cost.toFixed(2)}` };
   }
 
   sellTokenAsset(assetId: string, unitPrice: number, units: number): { ok: boolean; message: string } {
@@ -245,8 +245,8 @@ export class GrabStore {
       );
     }
 
-    this.emit(`Sold ${units} unit${units > 1 ? "s" : ""} for $${proceeds.toFixed(2)}`);
-    return { ok: true, message: `Sold ${units} unit${units > 1 ? "s" : ""} for $${proceeds.toFixed(2)}` };
+    this.emit(`Sold ${units} unit${units > 1 ? "s" : ""} for RM ${proceeds.toFixed(2)}`);
+    return { ok: true, message: `Sold ${units} unit${units > 1 ? "s" : ""} for RM ${proceeds.toFixed(2)}` };
   }
 
   // ── Announcement ─────────────────────────────────────────────────────────
